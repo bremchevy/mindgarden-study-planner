@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>MindGarden Study Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f6f2e7;
+        --bg-soft: #efe9da;
+        --surface: #fffdf6;
+        --surface-2: #f1ecdc;
+        --ink: #2c382c;
+        --ink-soft: #55624f;
+        --muted: #7c8774;
+        --line: #ddd6c2;
+        --sage: #6d8f66;
+        --sage-deep: #47663f;
+        --sage-tint: #e3ecd9;
+        --sage-tint-2: #d2e0c6;
+        --gold: #b98a2f;
+        --danger: #a4553f;
+        --shadow: 0 10px 30px rgba(60, 74, 52, 0.08);
+        --radius: 18px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1a201a;
+          --bg-soft: #212922;
+          --surface: #242e24;
+          --surface-2: #2b372b;
+          --ink: #eceade;
+          --ink-soft: #c3cdb9;
+          --muted: #97a48d;
+          --line: #3a473a;
+          --sage: #9dbd93;
+          --sage-deep: #b7d3ad;
+          --sage-tint: #2f3f2c;
+          --sage-tint-2: #3a4f36;
+          --gold: #d9ab4e;
+          --danger: #d08a70;
+          --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 16px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1, h2, h3 { font-family: "Newsreader", Georgia, serif; font-weight: 500; line-height: 1.15; margin: 0; }
+      p { margin: 0; }
+      button, input, select { font: inherit; color: inherit; }
+      button { cursor: pointer; }
+      :focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; border-radius: 6px; }
+
+      .wrap { max-width: 1020px; margin: 0 auto; padding: 0 20px 64px; }
+
+      /* ---------- Hero ---------- */
+      .hero { padding: 72px 0 48px; max-width: 640px; }
+      .hero .mark { display: inline-flex; align-items: center; gap: 10px; color: var(--sage-deep); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; font-size: 12.5px; margin-bottom: 22px; }
+      .hero .mark svg { width: 26px; height: 26px; }
+      .hero h1 { font-size: clamp(34px, 9vw, 58px); letter-spacing: -0.01em; }
+      .hero h1 em { font-style: italic; color: var(--sage-deep); }
+      .hero p { margin-top: 18px; font-size: 17.5px; color: var(--ink-soft); max-width: 52ch; }
+      .hero .cta-row { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        min-height: 44px; padding: 10px 20px; border-radius: 999px;
+        border: 1px solid var(--sage-deep); background: var(--sage-deep); color: #fbfaf3;
+        font-weight: 600; font-size: 15px; text-decoration: none;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      }
+      @media (prefers-color-scheme: dark) { .btn { color: #1c241c; } }
+      .btn:hover { transform: translateY(-1px); }
+      .btn.ghost { background: transparent; color: var(--sage-deep); }
+      .btn.small { min-height: 40px; padding: 8px 16px; font-size: 14px; }
+      .btn.quiet { background: var(--surface); border-color: var(--line); color: var(--ink); }
+      .btn:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+      /* ---------- Layout ---------- */
+      .grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
+      @media (min-width: 860px) {
+        .grid { grid-template-columns: 1.15fr 0.85fr; align-items: start; }
+        .stack { display: grid; gap: 22px; }
+      }
+      .card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 26px; box-shadow: var(--shadow);
+      }
+      .card h2 { font-size: 25px; margin-bottom: 6px; }
+      .card .lede { color: var(--ink-soft); font-size: 14.5px; margin-bottom: 20px; }
+      .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+      /* ---------- Progress ---------- */
+      .progress-card { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; margin-bottom: 22px; }
+      .ring-wrap { position: relative; width: 132px; height: 132px; flex: none; }
+      .ring-wrap svg { transform: rotate(-90deg); display: block; }
+      .ring-bg { stroke: var(--sage-tint); }
+      .ring-fg { stroke: var(--sage); transition: stroke-dashoffset 0.5s ease; }
+      .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .ring-center .big { font-family: "Newsreader", Georgia, serif; font-size: 30px; line-height: 1; }
+      .ring-center .small { font-size: 11.5px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+      .progress-stats { display: flex; gap: 36px; flex-wrap: wrap; }
+      .stat .num { font-family: "Newsreader", Georgia, serif; font-size: 34px; line-height: 1.05; }
+      .stat .lbl { font-size: 12.5px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px; }
+      .progress-note { width: 100%; color: var(--ink-soft); font-size: 14.5px; border-top: 1px solid var(--line); padding-top: 14px; }
+
+      /* ---------- Tasks ---------- */
+      .task-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 18px; }
+      @media (min-width: 560px) {
+        .task-form { grid-template-columns: 1.4fr 1fr 92px auto; }
+      }
+      .field input {
+        width: 100%; min-height: 44px; padding: 10px 14px; border-radius: 12px;
+        border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+      }
+      .field input::placeholder { color: var(--muted); }
+      .task-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+      .task {
+        display: flex; align-items: center; gap: 12px;
+        background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px 8px 8px;
+      }
+      .task label.check {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 44px; min-height: 44px; cursor: pointer; flex: none;
+      }
+      .task input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--sage-deep); cursor: pointer; margin: 0; }
+      .task .body { flex: 1; min-width: 0; }
+      .task .title { font-weight: 600; font-size: 15.5px; overflow-wrap: anywhere; }
+      .task.done .title { text-decoration: line-through; color: var(--muted); }
+      .task .meta { font-size: 13px; color: var(--muted); }
+      .task .mins { flex: none; font-size: 12.5px; font-weight: 600; color: var(--sage-deep); background: var(--sage-tint); border-radius: 999px; padding: 4px 10px; }
+      .task .del {
+        flex: none; min-width: 40px; min-height: 40px; border: none; background: transparent; border-radius: 10px;
+        color: var(--muted); font-size: 18px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
+      }
+      .task .del:hover { color: var(--danger); background: var(--bg); }
+      .empty { color: var(--muted); font-size: 14.5px; padding: 14px 4px; }
+      .count-line { margin-top: 16px; font-size: 14px; color: var(--ink-soft); }
+      .count-line strong { color: var(--sage-deep); }
+
+      /* ---------- Timer ---------- */
+      .timer-face { display: flex; flex-direction: column; align-items: center; padding: 6px 0 2px; }
+      .timer-ring { position: relative; width: 208px; height: 208px; }
+      .timer-ring svg { transform: rotate(-90deg); display: block; }
+      .timer-time {
+        position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      }
+      .timer-time .clock { font-family: "Newsreader", Georgia, serif; font-size: 52px; line-height: 1; font-variant-numeric: tabular-nums; }
+      .timer-time .mode { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+      .presets { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 20px 0 14px; }
+      .preset {
+        min-height: 40px; padding: 8px 18px; border-radius: 999px; border: 1px solid var(--line);
+        background: var(--bg); font-weight: 600; font-size: 14.5px;
+      }
+      .preset[aria-pressed="true"] { background: var(--sage-tint); border-color: var(--sage); color: var(--sage-deep); }
+      .timer-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+      .timer-msg { margin-top: 16px; text-align: center; font-size: 15px; color: var(--sage-deep); min-height: 24px; }
+      .break-row { margin-top: 6px; display: none; justify-content: center; }
+      .break-row.show { display: flex; }
+
+      /* ---------- Planner ---------- */
+      .plan-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 6px; }
+      @media (min-width: 560px) { .plan-form { grid-template-columns: 1.5fr 110px auto; } }
+      .plan-out { margin-top: 18px; display: none; }
+      .plan-out.show { display: block; }
+      .plan-summary { font-size: 15px; color: var(--ink-soft); margin-bottom: 14px; }
+      .plan-summary strong { color: var(--ink); }
+      .plan-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+      .plan-step { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); font-size: 14.5px; }
+      .plan-step .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--sage); }
+      .plan-step.break .dot { background: var(--gold); }
+      .plan-step.review .dot { background: var(--muted); }
+      .plan-step .what { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+      .plan-step .when { flex: none; font-weight: 600; color: var(--sage-deep); font-variant-numeric: tabular-nums; }
+      .plan-step.break .when { color: var(--gold); }
+      .plan-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+      footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 13.5px; }
+      footer .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-soft); font-weight: 600; }
+      footer svg { width: 18px; height: 18px; }
+
+      .grid > *, .stack > * { min-width: 0; }
+      img, svg { max-width: 100%; }
+
+      /* ---------- Small screens ---------- */
+      @media (max-width: 560px) {
+        .wrap { padding: 0 14px 52px; }
+        .hero { padding: 48px 0 34px; }
+        .hero p { font-size: 16.5px; }
+        .hero .cta-row .btn { flex: 1 1 140px; }
+        .card { padding: 20px 16px; }
+        .progress-card { gap: 18px; }
+        .progress-stats { gap: 22px; }
+        .stat .num { font-size: 28px; }
+        .timer-ring { width: min(208px, 62vw); height: auto; aspect-ratio: 1 / 1; }
+        .timer-ring svg { width: 100%; height: 100%; }
+        .timer-time .clock { font-size: 46px; }
+        .task { gap: 8px; padding-right: 8px; }
+        .task .mins { padding: 4px 8px; }
+        .plan-step { padding: 10px 12px; gap: 10px; }
+        footer { margin-top: 44px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <header class="hero">
+        <span class="mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8"/><path d="M12 13c0-3.5-2.8-5.5-7-5.5 0 4.5 2.5 6.5 7 5.5Z"/><path d="M12 10.5c0-3.2 2.4-5 6.5-5 0 4.2-2.2 6-6.5 5Z"/></svg>
+          MindGarden
+        </span>
+        <h1>Grow your focus, <em>one quiet session</em> at a time.</h1>
+        <p>A small, calm study planner. List what you need to learn, start a focus timer, and let a simple plan carry the session — no noise, no pressure.</p>
+        <div class="cta-row">
+          <a class="btn" href="#tasks">Plan today's tasks</a>
+          <a class="btn ghost" href="#timer">Start focusing</a>
+        </div>
+      </header>
+
+      <section class="card progress-card" aria-label="Session progress">
+        <div class="ring-wrap" role="img" aria-label="Progress ring showing the share of tasks completed">
+          <svg width="132" height="132" viewBox="0 0 132 132" aria-hidden="true">
+            <circle class="ring-bg" cx="66" cy="66" r="56" fill="none" stroke-width="10" />
+            <circle class="ring-fg" id="ringFg" cx="66" cy="66" r="56" fill="none" stroke-width="10" stroke-linecap="round" stroke-dasharray="351.86" stroke-dashoffset="351.86" />
+          </svg>
+          <div class="ring-center">
+            <span class="big" id="ringText">0%</span>
+            <span class="small">tasks done</span>
+          </div>
+        </div>
+        <div class="progress-stats">
+          <div class="stat">
+            <div class="num" id="statTasks">0 of 0</div>
+            <div class="lbl">Tasks completed</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statFocus">0 min</div>
+            <div class="lbl">Focus minutes this session</div>
+          </div>
+        </div>
+        <p class="progress-note" id="progressNote">Your garden is just getting started. Add a task below, or begin with a short focus session.</p>
+      </section>
+
+      <div class="grid">
+        <section class="card" id="tasks" aria-labelledby="tasksHeading">
+          <div class="card-head">
+            <h2 id="tasksHeading">Today's study tasks</h2>
+          </div>
+          <p class="lede">One small task at a time. Tick them off as you finish.</p>
+
+          <form class="task-form" id="taskForm">
+            <div class="field">
+              <label class="sr-only" for="taskTitle" style="position:absolute;left:-9999px;">Task</label>
+              <input id="taskTitle" type="text" placeholder="Task — e.g. Revise chapter 4 notes" maxlength="90" required />
+            </div>
+            <div class="field">
+              <label class="sr-only" for="taskSubject" style="position:absolute;left:-9999px;">Subject</label>
+              <input id="taskSubject" type="text" placeholder="Subject — e.g. Biology" maxlength="40" required />
+            </div>
+            <div class="field">
+              <label class="sr-only" for="taskMins" style="position:absolute;left:-9999px;">Estimated minutes</label>
+              <input id="taskMins" type="number" placeholder="Mins" min="1" max="600" required />
+            </div>
+            <button class="btn" type="submit">Add task</button>
+          </form>
+
+          <ul class="task-list" id="taskList"></ul>
+          <p class="empty" id="taskEmpty">No tasks yet — add your first one above.</p>
+          <p class="count-line" id="taskCount" aria-live="polite"></p>
+        </section>
+
+        <div class="stack">
+          <section class="card" id="timer" aria-labelledby="timerHeading">
+            <h2 id="timerHeading">Focus timer</h2>
+            <p class="lede">Pick a length, press start, and give one thing your full attention.</p>
+
+            <div class="timer-face">
+              <div class="timer-ring">
+                <svg width="208" height="208" viewBox="0 0 208 208" aria-hidden="true">
+                  <circle class="ring-bg" cx="104" cy="104" r="92" fill="none" stroke-width="9" />
+                  <circle class="ring-fg" id="timerRing" cx="104" cy="104" r="92" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="578.05" stroke-dashoffset="0" />
+                </svg>
+                <div class="timer-time">
+                  <span class="clock" id="clock">25:00</span>
+                  <span class="mode" id="timerMode">Focus</span>
+                </div>
+              </div>
+
+              <div class="presets" role="group" aria-label="Session length">
+                <button type="button" class="preset" data-mins="15" aria-pressed="false">15 min</button>
+                <button type="button" class="preset" data-mins="25" aria-pressed="true">25 min</button>
+                <button type="button" class="preset" data-mins="50" aria-pressed="false">50 min</button>
+              </div>
+
+              <div class="timer-controls">
+                <button type="button" class="btn" id="startPauseBtn">Start</button>
+                <button type="button" class="btn quiet" id="resetBtn">Reset</button>
+              </div>
+
+              <p class="timer-msg" id="timerMsg" aria-live="polite"></p>
+              <div class="break-row" id="breakRow">
+                <button type="button" class="btn ghost small" id="breakBtn">Take a 5-minute break</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="card" id="planner" aria-labelledby="plannerHeading">
+            <h2 id="plannerHeading">Plan my session</h2>
+            <p class="lede">Tell MindGarden what you're studying and how long you have. It breaks the time into gentle focus blocks and a break.</p>
+
+            <form class="plan-form" id="planForm">
+              <div class="field">
+                <label class="sr-only" for="planTopic" style="position:absolute;left:-9999px;">Topic</label>
+                <input id="planTopic" type="text" placeholder="Topic — e.g. Organic chemistry" maxlength="70" required />
+              </div>
+              <div class="field">
+                <label class="sr-only" for="planMins" style="position:absolute;left:-9999px;">Available minutes</label>
+                <input id="planMins" type="number" placeholder="Minutes" min="10" max="300" required />
+              </div>
+              <button class="btn" type="submit">Make my plan</button>
+            </form>
+
+            <div class="plan-out" id="planOut" aria-live="polite">
+              <p class="plan-summary" id="planSummary"></p>
+              <ul class="plan-steps" id="planSteps"></ul>
+              <div class="plan-actions">
+                <button type="button" class="btn ghost small" id="planToTimer">Set timer to first block</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer>
+        <span class="brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8"/><path d="M12 13c0-3.5-2.8-5.5-7-5.5 0 4.5 2.5 6.5 7 5.5Z"/><path d="M12 10.5c0-3.2 2.4-5 6.5-5 0 4.2-2.2 6-6.5 5Z"/></svg>
+          MindGarden
+        </span>
+        <span>Concept and build by Raji Ayatullah</span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---------------- State (this session only) ---------------- */
+        var tasks = [];
+        var focusMinutes = 0;
+
+        /* ---------------- Progress ---------------- */
+        var ringFg = document.getElementById("ringFg");
+        var ringText = document.getElementById("ringText");
+        var statTasks = document.getElementById("statTasks");
+        var statFocus = document.getElementById("statFocus");
+        var progressNote = document.getElementById("progressNote");
+        var RING_C = 351.86;
+
+        function renderProgress() {
+          var total = tasks.length;
+          var done = tasks.filter(function (t) { return t.done; }).length;
+          var pct = total === 0 ? 0 : Math.round((done / total) * 100);
+          ringFg.style.strokeDashoffset = String(RING_C * (1 - pct / 100));
+          ringText.textContent = pct + "%";
+          statTasks.textContent = done + " of " + total;
+          statFocus.textContent = focusMinutes + " min";
+          if (total === 0 && focusMinutes === 0) {
+            progressNote.textContent = "Your garden is just getting started. Add a task below, or begin with a short focus session.";
+          } else if (total > 0 && done === total && total > 0) {
+            progressNote.textContent = "Every task on today's list is done. Lovely work — consider a short break before planting anything new.";
+          } else if (done > 0 || focusMinutes > 0) {
+            progressNote.textContent = "It's growing. Each finished task and each completed focus block adds to today's garden.";
+          } else {
+            progressNote.textContent = "Your list is planted. Tick off the first task whenever you're ready.";
+          }
+        }
+
+        /* ---------------- Tasks ---------------- */
+        var taskForm = document.getElementById("taskForm");
+        var taskList = document.getElementById("taskList");
+        var taskEmpty = document.getElementById("taskEmpty");
+        var taskCount = document.getElementById("taskCount");
+        var nextId = 1;
+
+        function renderTasks() {
+          taskList.innerHTML = "";
+          tasks.forEach(function (task) {
+            var li = document.createElement("li");
+            li.className = "task" + (task.done ? " done" : "");
+
+            var label = document.createElement("label");
+            label.className = "check";
+            var cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = task.done;
+            cb.setAttribute("aria-label", "Mark \"" + task.title + "\" as done");
+            cb.addEventListener("change", function () {
+              task.done = cb.checked;
+              renderTasks();
+              renderProgress();
+            });
+            label.appendChild(cb);
+
+            var body = document.createElement("div");
+            body.className = "body";
+            var title = document.createElement("div");
+            title.className = "title";
+            title.textContent = task.title;
+            var meta = document.createElement("div");
+            meta.className = "meta";
+            meta.textContent = task.subject;
+            body.appendChild(title);
+            body.appendChild(meta);
+
+            var mins = document.createElement("span");
+            mins.className = "mins";
+            mins.textContent = task.mins + " min";
+
+            var del = document.createElement("button");
+            del.type = "button";
+            del.className = "del";
+            del.textContent = "×";
+            del.setAttribute("aria-label", "Delete task \"" + task.title + "\"");
+            del.addEventListener("click", function () {
+              tasks = tasks.filter(function (t) { return t.id !== task.id; });
+              renderTasks();
+              renderProgress();
+            });
+
+            li.appendChild(label);
+            li.appendChild(body);
+            li.appendChild(mins);
+            li.appendChild(del);
+            taskList.appendChild(li);
+          });
+
+          taskEmpty.style.display = tasks.length === 0 ? "block" : "none";
+          var done = tasks.filter(function (t) { return t.done; }).length;
+          taskCount.innerHTML = tasks.length === 0
+            ? ""
+            : "<strong>" + done + " of " + tasks.length + "</strong> tasks done";
+        }
+
+        taskForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var title = document.getElementById("taskTitle").value.trim();
+          var subject = document.getElementById("taskSubject").value.trim();
+          var mins = parseInt(document.getElementById("taskMins").value, 10);
+          if (!title || !subject || !mins || mins < 1) return;
+          tasks.push({ id: nextId++, title: title, subject: subject, mins: mins, done: false });
+          taskForm.reset();
+          document.getElementById("taskTitle").focus();
+          renderTasks();
+          renderProgress();
+        });
+
+        /* ---------------- Timer ---------------- */
+        var TIMER_C = 578.05;
+        var clock = document.getElementById("clock");
+        var timerMode = document.getElementById("timerMode");
+        var timerRing = document.getElementById("timerRing");
+        var timerMsg = document.getElementById("timerMsg");
+        var startPauseBtn = document.getElementById("startPauseBtn");
+        var resetBtn = document.getElementById("resetBtn");
+        var breakRow = document.getElementById("breakRow");
+        var breakBtn = document.getElementById("breakBtn");
+        var presetBtns = Array.prototype.slice.call(document.querySelectorAll(".preset"));
+
+        var timer = {
+          mode: "focus",            // "focus" | "break"
+          totalSec: 25 * 60,
+          remainingSec: 25 * 60,
+          running: false,
+          endAt: 0,
+          interval: null
+        };
+
+        var audioCtx = null;
+        function chime() {
+          try {
+            if (!audioCtx) {
+              var AC = window.AudioContext || window.webkitAudioContext;
+              if (!AC) return;
+              audioCtx = new AC();
+            }
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            var now = audioCtx.currentTime;
+            [523.25, 783.99].forEach(function (freq, i) {
+              var osc = audioCtx.createOscillator();
+              var gain = audioCtx.createGain();
+              osc.type = "sine";
+              osc.frequency.value = freq;
+              var start = now + i * 0.35;
+              gain.gain.setValueAtTime(0.0001, start);
+              gain.gain.exponentialRampToValueAtTime(0.12, start + 0.05);
+              gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.9);
+              osc.connect(gain);
+              gain.connect(audioCtx.destination);
+              osc.start(start);
+              osc.stop(start + 1);
+            });
+          } catch (err) { /* sound is a garnish, never a blocker */ }
+        }
+
+        function fmt(sec) {
+          var m = Math.floor(sec / 60);
+          var s = sec % 60;
+          return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+        }
+
+        function renderTimer() {
+          clock.textContent = fmt(timer.remainingSec);
+          timerMode.textContent = timer.mode === "break" ? "Break" : "Focus";
+          var frac = timer.totalSec === 0 ? 0 : timer.remainingSec / timer.totalSec;
+          timerRing.style.strokeDashoffset = String(TIMER_C * (1 - frac));
+          startPauseBtn.textContent = timer.running ? "Pause" : (timer.remainingSec < timer.totalSec && timer.remainingSec > 0 ? "Resume" : "Start");
+        }
+
+        function stopInterval() {
+          if (timer.interval) { clearInterval(timer.interval); timer.interval = null; }
+          timer.running = false;
+        }
+
+        function finishTimer() {
+          stopInterval();
+          timer.remainingSec = 0;
+          renderTimer();
+          chime();
+          if (timer.mode === "focus") {
+            focusMinutes += Math.round(timer.totalSec / 60);
+            timerMsg.textContent = "Session complete — nicely done. Your focus minutes have been added above.";
+            breakRow.classList.add("show");
+            renderProgress();
+          } else {
+            timerMsg.textContent = "Break over. Whenever you're ready, settle in for the next block.";
+            breakRow.classList.remove("show");
+          }
+          startPauseBtn.textContent = "Start";
+        }
+
+        function tick() {
+          var left = Math.round((timer.endAt - Date.now()) / 1000);
+          if (left <= 0) { finishTimer(); return; }
+          timer.remainingSec = left;
+          renderTimer();
+        }
+
+        function setTimer(minutes, mode) {
+          stopInterval();
+          timer.mode = mode;
+          timer.totalSec = minutes * 60;
+          timer.remainingSec = minutes * 60;
+          timerMsg.textContent = "";
+          if (mode === "focus") breakRow.classList.remove("show");
+          renderTimer();
+        }
+
+        presetBtns.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            presetBtns.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+            btn.setAttribute("aria-pressed", "true");
+            setTimer(parseInt(btn.getAttribute("data-mins"), 10), "focus");
+          });
+        });
+
+        startPauseBtn.addEventListener("click", function () {
+          if (timer.running) {
+            stopInterval();
+            renderTimer();
+            return;
+          }
+          if (timer.remainingSec <= 0) {
+            // Restart the same length after a finished run.
+            timer.remainingSec = timer.totalSec;
+            if (timer.mode === "focus") breakRow.classList.remove("show");
+            timerMsg.textContent = "";
+          }
+          timer.endAt = Date.now() + timer.remainingSec * 1000;
+          timer.running = true;
+          timer.interval = setInterval(tick, 250);
+          renderTimer();
+        });
+
+        resetBtn.addEventListener("click", function () {
+          setTimer(Math.round(timer.totalSec / 60), timer.mode);
+        });
+
+        breakBtn.addEventListener("click", function () {
+          setTimer(5, "break");
+          timerMsg.textContent = "Break time — stretch, breathe, look away from the screen.";
+          breakRow.classList.remove("show");
+          // Auto-start the break so it feels effortless.
+          timer.endAt = Date.now() + timer.remainingSec * 1000;
+          timer.running = true;
+          timer.interval = setInterval(tick, 250);
+          renderTimer();
+        });
+
+        /* ---------------- Planner ---------------- */
+        var planForm = document.getElementById("planForm");
+        var planOut = document.getElementById("planOut");
+        var planSummary = document.getElementById("planSummary");
+        var planSteps = document.getElementById("planSteps");
+        var planToTimer = document.getElementById("planToTimer");
+        var firstBlockMins = 25;
+
+        function buildPlan(topic, total) {
+          var steps = [];
+          var remaining = total;
+          while (remaining > 0) {
+            var focus = Math.min(25, remaining);
+            steps.push({ type: "focus", label: "Focus — " + topic, mins: focus });
+            remaining -= focus;
+            if (remaining >= 15) {
+              steps.push({ type: "break", label: "Break — step away, stretch, sip some water", mins: 5 });
+              remaining -= 5;
+            } else if (remaining > 0) {
+              steps.push({ type: "review", label: "Review — skim your notes and note what's still fuzzy", mins: remaining });
+              remaining = 0;
+            }
+          }
+          return steps;
+        }
+
+        planForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var topic = document.getElementById("planTopic").value.trim();
+          var total = parseInt(document.getElementById("planMins").value, 10);
+          if (!topic || !total || total < 10) return;
+          total = Math.min(total, 300);
+
+          var steps = buildPlan(topic, total);
+          var focusBlocks = steps.filter(function (s) { return s.type === "focus"; }).length;
+          firstBlockMins = steps[0].mins;
+
+          planSummary.innerHTML = "Here's a calm way to spend <strong>" + total + " minutes</strong> on <strong></strong>:";
+          planSummary.querySelector("strong:last-child").textContent = topic;
+          planSummary.insertAdjacentText("beforeend", " " + focusBlocks + (focusBlocks === 1 ? " focus block" : " focus blocks") + ", paced with short pauses.");
+
+          planSteps.innerHTML = "";
+          var cursor = 0;
+          steps.forEach(function (step) {
+            var li = document.createElement("li");
+            li.className = "plan-step " + step.type;
+            var dot = document.createElement("span");
+            dot.className = "dot";
+            var what = document.createElement("span");
+            what.className = "what";
+            what.textContent = step.label;
+            var when = document.createElement("span");
+            when.className = "when";
+            when.textContent = step.mins + " min";
+            li.appendChild(dot);
+            li.appendChild(what);
+            li.appendChild(when);
+            planSteps.appendChild(li);
+            cursor += step.mins;
+          });
+
+          planOut.classList.add("show");
+        });
+
+        planToTimer.addEventListener("click", function () {
+          presetBtns.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+          setTimer(firstBlockMins, "focus");
+          timerMsg.textContent = "Timer set to your first block — " + firstBlockMins + " minutes. Press Start when you're ready.";
+          document.getElementById("timer").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        /* ---------------- Init ---------------- */
+        renderTasks();
+        renderProgress();
+        renderTimer();
+      })();
+    </script>
+  </body>
+</html>
