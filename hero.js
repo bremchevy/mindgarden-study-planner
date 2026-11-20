@@ -1,47 +1,20 @@
 (function () {
   "use strict";
-
   var hero = document.getElementById("gardenHero");
-  var film = document.getElementById("gardenFilm");
   var control = document.getElementById("sceneControl");
   var controlText = document.getElementById("sceneControlText");
   var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var connection = navigator.connection;
   var paused = motion.matches || Boolean(connection && connection.saveData);
   var inView = true;
-  var loaded = false;
-
   function syncScene() {
-    var stopped = paused || !inView || document.hidden;
-    // Finish the entrance permanently on the first stop, so resuming ambient
-    // motion never hides the copy or makes a mature plant grow in again.
-    if (stopped) hero.classList.add("is-settled");
-    hero.classList.toggle("is-paused", stopped);
+    hero.classList.toggle("is-paused", paused || !inView || document.hidden);
     control.setAttribute("aria-pressed", String(paused));
     control.setAttribute("aria-label", paused ? "Play garden animation" : "Pause garden animation");
-    controlText.textContent = paused ? "Play scene" : "Pause scene";
+    controlText.textContent = paused ? "Play motion" : "Pause motion";
     control.querySelector(".scene-icon").textContent = paused ? "▷" : "Ⅱ";
-
-    if (stopped) {
-      film.pause();
-      return;
-    }
-    // Don't even request the film for reduced-motion or data-saving visitors
-    // unless they explicitly opt in. The poster always paints immediately.
-    if (!loaded) {
-      var source = film.querySelector("source");
-      source.src = source.dataset.src;
-      film.load();
-      loaded = true;
-    }
-    var play = film.play();
-    if (play) play.catch(function () { /* A blocked autoplay keeps the poster. */ });
   }
-
-  control.addEventListener("click", function () {
-    paused = !paused;
-    syncScene();
-  });
+  control.addEventListener("click", function () { paused = !paused; syncScene(); });
   motion.addEventListener("change", function (event) {
     paused = event.matches || Boolean(connection && connection.saveData);
     syncScene();
@@ -53,5 +26,11 @@
       syncScene();
     }, { threshold: 0 }).observe(hero);
   }
+  // Mirror the existing planner clock rather than introducing a second timer.
+  var clock = document.getElementById("clock");
+  var heroClock = document.getElementById("heroClock");
+  function syncClock() { heroClock.textContent = clock.textContent; }
+  new MutationObserver(syncClock).observe(clock, { childList: true, characterData: true, subtree: true });
+  syncClock();
   syncScene();
 })();
