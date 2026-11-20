@@ -400,6 +400,10 @@
  .growth-hero .c-footer span:nth-child(odd)::after { font-size: 22px; margin-left: 20px; }
  .growth-hero .c-button { font-size: 10px; gap: 15px; }
 }
+/* Keep the layered collage readable on compact screens; the caption is decorative. */
+@media (max-width: 1000px) {
+ .growth-hero .c-photo > span { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
  .growth-hero *, .growth-hero *::after { animation: none !important; transition: none !important; }
 }
