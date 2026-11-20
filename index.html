@@ -4,11 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="A little less chaos. A lot more you. Plan your study tasks, find your focus, and grow with MindGarden." />
     <link rel="icon" href="data:," />
     <title>MindGarden Study Planner</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       :root {
         --bg: #f6f2e7;
@@ -222,94 +223,14 @@
     <script src="hero.js" defer></script>
   </head>
   <body>
-      <header class="hero" id="gardenHero" aria-labelledby="heroHeading">
-        <div class="hero-backdrop" aria-hidden="true">
-          <video class="hero-film" id="gardenFilm" muted loop playsinline preload="none" poster="assets/garden-poster.jpg" tabindex="-1" disablepictureinpicture>
-            <source data-src="assets/garden-film.mp4" type="video/mp4" />
-          </video>
-          <div class="hero-shade"></div>
-          <div class="hero-grain"></div>
-        </div>
-        <nav class="hero-nav" aria-label="Main navigation">
-        <a class="mark" href="#gardenHero" aria-label="MindGarden home">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8"/><path d="M12 13c0-3.5-2.8-5.5-7-5.5 0 4.5 2.5 6.5 7 5.5Z"/><path d="M12 10.5c0-3.2 2.4-5 6.5-5 0 4.2-2.2 6-6.5 5Z"/></svg>
-          MindGarden
-        </a>
-          <span class="nav-note">A quieter kind of productive.</span>
-          <a class="garden-link" href="#tasks">Your study space <span aria-hidden="true">↗</span></a>
-        </nav>
-
-        <div class="hero-content">
-          <div class="hero-copy">
-            <span class="hero-eyebrow"><span></span> A little room to grow</span>
-            <h1 id="heroHeading">Less noise.<br />More focus.<br /><em>Real growth.</em></h1>
-            <p>Great things grow from small beginnings. Plant a task, find your focus, and give your mind a little space to bloom.</p>
-            <div class="cta-row">
-              <a class="btn hero-primary" href="#tasks">Plant your first task <span aria-hidden="true">↗</span></a>
-              <a class="hero-secondary" href="#timer"><span class="hero-play" aria-hidden="true">▷</span> Start focusing</a>
-            </div>
-            <span class="hero-footnote">Your pace. Your space. No pressure.</span>
-          </div>
-
-          <div class="garden-world" aria-hidden="true">
-            <div class="garden-halo"></div>
-            <span class="garden-coordinate">THE ART OF SHOWING UP · EST. TODAY</span>
-            <svg class="garden-botanical" viewBox="0 0 600 620" fill="none">
-              <defs>
-                <linearGradient id="leafGreen" x1="-45" y1="0" x2="35" y2="-120" gradientUnits="userSpaceOnUse"><stop stop-color="#3b734b"/><stop offset=".45" stop-color="#99bc70"/><stop offset="1" stop-color="#e6eeb3"/></linearGradient>
-                <linearGradient id="leafLight" x1="-20" y1="0" x2="40" y2="-120" gradientUnits="userSpaceOnUse"><stop stop-color="#557843"/><stop offset="1" stop-color="#e8efb1"/></linearGradient>
-                <linearGradient id="stemGreen" x1="300" y1="530" x2="300" y2="130" gradientUnits="userSpaceOnUse"><stop stop-color="#668b58"/><stop offset="1" stop-color="#d4dda1"/></linearGradient>
-                <radialGradient id="soilGlow"><stop stop-color="#a5b56c" stop-opacity=".35"/><stop offset="1" stop-color="#637b43" stop-opacity="0"/></radialGradient>
-                <symbol id="gardenLeaf" viewBox="-50 -125 100 130" overflow="visible"><path d="M0 0C-53-39-47-89 0-120C38-79 46-39 0 0Z" fill="url(#leafGreen)"/><path d="M0-4L0-110M0-39L-24-66M0-65L-22-89M0-49L23-77M0-80L15-98" stroke="#e9efbb" stroke-opacity=".35" stroke-width=".8"/></symbol>
-                <symbol id="gardenLeafSmall" viewBox="-50 -125 100 130" overflow="visible"><path d="M0 0C-36-36-36-79 0-120C42-80 35-35 0 0Z" fill="url(#leafLight)"/><path d="M0-3V-110" stroke="#ecf0c8" stroke-opacity=".45"/></symbol>
-              </defs>
-              <g class="garden-orbits" stroke="#dce6b3" stroke-width=".7">
-                <ellipse cx="305" cy="310" rx="242" ry="252" stroke-opacity=".22"/>
-                <ellipse cx="305" cy="310" rx="220" ry="252" transform="rotate(35 305 310)" stroke-opacity=".1"/>
-                <path d="M65 340C133 403 450 425 546 304" stroke-opacity=".32" stroke-dasharray="2 7"/>
-                <path d="M90 195C172 139 453 158 529 254" stroke-opacity=".19"/>
-                <circle cx="77" cy="226" r="4" fill="#e8edc5" stroke="none"/>
-                <circle cx="525" cy="410" r="3" fill="#c3d591" stroke="none"/>
-              </g>
-              <ellipse cx="303" cy="533" rx="210" ry="48" fill="url(#soilGlow)"/>
-              <g class="garden-plant">
-                <g class="garden-stems" stroke="url(#stemGreen)" stroke-linecap="round">
-                  <path d="M301 530C300 427 304 277 297 155" stroke-width="4"/>
-                  <path d="M300 527C275 448 222 375 153 320" stroke-width="3"/>
-                  <path d="M301 528C335 444 391 365 440 291" stroke-width="3"/>
-                  <path d="M299 493C269 414 255 322 236 243" stroke-width="2.5"/>
-                  <path d="M305 492C327 373 350 296 376 217" stroke-width="2.5"/>
-                </g>
-                <g transform="translate(298 445) rotate(-58)"><use class="garden-leaf leaf-1" href="#gardenLeaf" x="-47" y="-120" width="94" height="130"/></g>
-                <g transform="translate(303 397) rotate(57)"><use class="garden-leaf leaf-2" href="#gardenLeaf" x="-50" y="-132" width="100" height="143"/></g>
-                <g transform="translate(300 329) rotate(-48)"><use class="garden-leaf leaf-3" href="#gardenLeaf" x="-40" y="-115" width="80" height="125"/></g>
-                <g transform="translate(300 270) rotate(39)"><use class="garden-leaf leaf-4" href="#gardenLeaf" x="-35" y="-104" width="70" height="113"/></g>
-                <g transform="translate(297 212) rotate(-12)"><use class="garden-leaf leaf-5" href="#gardenLeafSmall" x="-29" y="-102" width="58" height="109"/></g>
-                <g transform="translate(249 422) rotate(-65)"><use class="garden-leaf leaf-2" href="#gardenLeaf" x="-38" y="-110" width="76" height="120"/></g>
-                <g transform="translate(208 374) rotate(5)"><use class="garden-leaf leaf-3" href="#gardenLeafSmall" x="-28" y="-96" width="56" height="104"/></g>
-                <g transform="translate(171 337) rotate(-57)"><use class="garden-leaf leaf-4" href="#gardenLeaf" x="-30" y="-98" width="60" height="106"/></g>
-                <g transform="translate(264 377) rotate(-27)"><use class="garden-leaf leaf-4" href="#gardenLeafSmall" x="-24" y="-93" width="48" height="101"/></g>
-                <g transform="translate(243 281) rotate(-14)"><use class="garden-leaf leaf-5" href="#gardenLeafSmall" x="-22" y="-87" width="44" height="94"/></g>
-                <g transform="translate(344 438) rotate(55)"><use class="garden-leaf leaf-1" href="#gardenLeaf" x="-38" y="-115" width="76" height="125"/></g>
-                <g transform="translate(380 383) rotate(-5)"><use class="garden-leaf leaf-3" href="#gardenLeaf" x="-31" y="-103" width="62" height="111"/></g>
-                <g transform="translate(415 331) rotate(54)"><use class="garden-leaf leaf-4" href="#gardenLeaf" x="-29" y="-97" width="58" height="105"/></g>
-                <g transform="translate(350 304) rotate(43)"><use class="garden-leaf leaf-4" href="#gardenLeafSmall" x="-22" y="-94" width="44" height="102"/></g>
-                <g transform="translate(373 228) rotate(20)"><use class="garden-leaf leaf-5" href="#gardenLeafSmall" x="-22" y="-92" width="44" height="100"/></g>
-              </g>
-              <g class="garden-sparkles" fill="#f5ebba"><circle cx="184" cy="229" r="2"/><circle cx="409" cy="170" r="2.4"/><circle cx="463" cy="435" r="1.8"/><circle cx="130" cy="438" r="2"/><circle cx="331" cy="106" r="1.7"/></g>
-            </svg>
-            <div class="garden-label label-top"><span class="label-dot"></span> A little better, every day.</div>
-            <div class="garden-label label-bottom"><span class="label-sprout">↗</span><div>Small steps.<br /><em>Deep roots.</em></div></div>
-            <span class="garden-specimen">FIG. 01 — YOUR POTENTIAL, IN BLOOM</span>
-          </div>
-        </div>
-
-        <div class="hero-bottom">
-          <a class="hero-scroll" href="#tasks"><span aria-hidden="true">↓</span> Scroll to grow</a>
-          <div class="garden-chapters" aria-hidden="true"><span>01 <i></i> Plant a task</span><span>02 <i></i> Nurture your focus</span><span>03 <i></i> Grow a little</span></div>
-          <button class="scene-control" id="sceneControl" type="button" aria-pressed="false" aria-label="Pause garden animation"><span class="scene-icon" aria-hidden="true">Ⅱ</span><span id="sceneControlText">Pause scene</span></button>
-        </div>
-      </header>
+    <header class="growth-hero" id="gardenHero" aria-labelledby="heroHeading">
+      <svg class="growth-symbols" aria-hidden="true"><defs><symbol id="growthLogo" viewBox="0 0 32 32"><path d="M16 28V15M16 19C6 20 4 14 4 8c7-1 14 2 12 11Zm0-5C16 7 20 4 28 4c1 8-4 12-12 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol></defs></svg>
+      <div class="growth-strip"><span>A STUDY SPACE THAT'S ON YOUR SIDE.</span><button id="sceneControl" type="button" aria-pressed="false" aria-label="Pause garden animation"><span class="scene-icon" aria-hidden="true">Ⅱ</span> <span id="sceneControlText">Pause motion</span></button></div>
+    <nav class="nav" aria-label="Main navigation"><a class="wordmark" href="#gardenHero"><svg><use href="#growthLogo"/></svg>MindGarden</a><div class="nav-mid">BIG DREAMS. SMALL STEPS.</div><a class="nav-cta" href="#tasks">Let's grow <span>↗</span></a></nav>
+    <div class="c-hero"><div class="c-copy"><div class="eyebrow"><span class="c-pill">GROWTH LOOKS GOOD ON YOU</span></div><h1 id="heroHeading">A little<br />less <span class="c-chaos">chaos.</span><br />A lot more<br /><em>you.</em><svg class="c-underline" viewBox="0 0 250 25"><path d="M4 14Q108-8 244 9M15 22Q149 2 218 18" fill="none" stroke="#f07444" stroke-width="5" stroke-linecap="round"/></svg></h1><p>Big things start with one small task.<br />Find your focus, make your plan, and<br />grow into whatever comes next.</p><a class="button c-button" href="#tasks">Make room for good things <span>↗</span></a><div class="c-note">A study space that’s on your side.</div></div>
+      <div class="c-art"><span aria-hidden="true" class="c-doodle doodle-1">✳</span><div class="c-photo" aria-hidden="true"><img src="assets/growth-ferns.jpg" alt="" width="1400" height="1800" fetchpriority="high" decoding="async"/><span>IT’S A GOOD DAY<br />TO BEGIN.</span></div><div class="c-sticker" aria-hidden="true"><span>YOU DON'T HAVE TO<br />DO IT ALL.</span><strong>Just<br /><em>start.</em></strong><svg viewBox="0 0 80 80"><path d="M15 60Q62 78 62 23M37 38 62 15 73 45" fill="none" stroke="#303721" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><a class="c-focus" href="#timer" aria-label="Open your focus timer"><div><span class="c-focus-dot"></span> YOUR FOCUS TIMER <span>↗</span></div><strong id="heroClock" aria-hidden="true">25:00</strong><footer><span>One thing at a time.</span><span class="c-pause" aria-hidden="true">↗</span></footer></a><div class="c-flower" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><radialGradient id="petal"><stop stop-color="#967cc6"/><stop offset="1" stop-color="#c7b1ef"/></radialGradient></defs><g fill="url(#petal)" stroke="#9476bf" stroke-width="1"><ellipse cx="100" cy="57" rx="30" ry="53"/><ellipse cx="100" cy="57" rx="30" ry="53" transform="rotate(60 100 100)"/><ellipse cx="100" cy="57" rx="30" ry="53" transform="rotate(120 100 100)"/><ellipse cx="100" cy="57" rx="30" ry="53" transform="rotate(180 100 100)"/><ellipse cx="100" cy="57" rx="30" ry="53" transform="rotate(240 100 100)"/><ellipse cx="100" cy="57" rx="30" ry="53" transform="rotate(300 100 100)"/></g><circle cx="100" cy="100" r="27" fill="#e7eea3"/><circle cx="94" cy="95" r="3" fill="#475034"/><circle cx="108" cy="95" r="3" fill="#475034"/><path d="M91 104q9 11 19 0" fill="none" stroke="#475034" stroke-width="2" stroke-linecap="round"/></svg></div><span class="c-handwritten" aria-hidden="true">progress, not perfection.</span><span aria-hidden="true" class="c-doodle doodle-2">✦</span></div>
+    </div><footer class="c-footer" aria-hidden="true"><span>LESS PRESSURE.</span><span>MORE PROGRESS. ↗</span><span>LESS PRESSURE.</span><span>MORE PROGRESS. ↗</span></footer>
+    </header>
 
     <div class="wrap">
       <section class="card progress-card" aria-label="Session progress">
