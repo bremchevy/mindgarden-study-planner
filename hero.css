@@ -180,16 +180,6 @@
   filter:saturate(.68) brightness(.8);
   animation:fern-breathe 15s ease-in-out infinite alternate;
 }
-.growth-hero .c-photo>span {
-  position:absolute;
-  bottom:24px;
-  left:25px;
-  color:#e9edc3;
-  letter-spacing:.05em;
-  font-weight:400;
-  font-size:29px;
-  line-height:1.05;
-}
 .growth-hero .c-sticker {
   position:absolute;
   width:211px;
@@ -349,7 +339,6 @@
   vertical-align:middle;
 }
 .growth-hero .c-copy p { color: #64705a; }
-.growth-hero .c-photo > span { bottom: 135px; font-size: 24px; max-width: 240px; }
 .growth-hero .c-note { color: #69755c; }
 .growth-hero .c-focus { display: block; }
 .growth-hero .c-focus:hover, .growth-hero .c-focus:focus-visible { animation-play-state: paused; }
@@ -385,8 +374,7 @@
  .growth-hero .c-copy h1 { font-size: clamp(48px, 13vw, 74px); }
  .growth-hero .c-art { height: 500px; width: 310px; max-width: 100%; margin: 0 auto; }
  .growth-hero .c-photo { left: 5px; width: 220px; height: 365px; }
- .growth-hero .c-photo > span { bottom: 65px; left: 14px; max-width: 110px; font-size: 18px; }
- .growth-hero .c-sticker { width: 160px; height: 210px; right: -10px; padding: 48px 20px 15px; }
+  .growth-hero .c-sticker { width: 160px; height: 210px; right: -10px; padding: 48px 20px 15px; }
  .growth-hero .c-sticker > strong { font-size: 40px; }
  .growth-hero .c-sticker > svg { width: 45px; height: 45px; right: 10px; bottom: 18px; }
  .growth-hero .c-focus { width: 260px; bottom: 10px; right: -5px; padding: 17px; }
@@ -399,10 +387,6 @@
  .growth-hero .c-footer span:nth-child(n+3) { display: none; }
  .growth-hero .c-footer span:nth-child(odd)::after { font-size: 22px; margin-left: 20px; }
  .growth-hero .c-button { font-size: 10px; gap: 15px; }
-}
-/* Keep the layered collage readable on compact screens; the caption is decorative. */
-@media (max-width: 1000px) {
- .growth-hero .c-photo > span { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
  .growth-hero *, .growth-hero *::after { animation: none !important; transition: none !important; }
