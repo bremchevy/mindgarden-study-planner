@@ -13,6 +13,9 @@
 
   function syncScene() {
     var stopped = paused || !inView || document.hidden;
+    // Finish the entrance permanently on the first stop, so resuming ambient
+    // motion never hides the copy or makes a mature plant grow in again.
+    if (stopped) hero.classList.add("is-settled");
     hero.classList.toggle("is-paused", stopped);
     control.setAttribute("aria-pressed", String(paused));
     control.setAttribute("aria-label", paused ? "Play garden animation" : "Pause garden animation");
